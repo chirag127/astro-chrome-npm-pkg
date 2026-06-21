@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "description": "Shared visual chrome for chirag127 Astro sites — Header / Sidebar / BottomBar / Footer / Stamp / SEO / Auth UI / Analytics / Consent + 24 legal pages + Datasheet Dark tokens + self-hosted fonts. Peer-deps on @chirag127/astro-shell.",
   "type": "module",
-  "license": "SEE LICENSE IN LICENSE",
+  "license": "MIT",
   "author": "Chirag Singhal <chirag@oriz.in>",
   "homepage": "https://github.com/chirag127/astro-chrome-npm-pkg#readme",
   "repository": { "type": "git", "url": "git+https://github.com/chirag127/astro-chrome-npm-pkg.git" },
