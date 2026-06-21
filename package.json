@@ -1,6 +1,6 @@
 {
   "name": "@chirag127/astro-chrome",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Shared visual chrome for chirag127 Astro sites — Header / Sidebar / BottomBar / Footer / Stamp / SEO / Auth UI / Analytics / Consent + 24 legal pages + Datasheet Dark tokens + self-hosted fonts. Peer-deps on @chirag127/astro-shell.",
   "type": "module",
   "license": "MIT",
@@ -12,8 +12,17 @@
   "files": ["src", "LICENSE", "README.md"],
   "main": "./src/index.ts",
   "types": "./src/index.ts",
-  "exports": { ".": "./src/index.ts" },
-  "publishConfig": { "access": "public" },"peerDependencies":{"@chirag127/astro-shell":"^0.1.0"},
+  "exports": {
+    ".": "./src/index.ts",
+    "./AccountPanel": "./src/components/AccountPanel.tsx",
+    "./FinishSignIn": "./src/components/FinishSignIn.tsx"
+  },
+  "publishConfig": { "access": "public" },
+  "peerDependencies": {
+    "@chirag127/astro-shell": "^0.1.0",
+    "firebase": "^11.0.0 || ^12.0.0",
+    "react": "^18.0.0 || ^19.0.0"
+  },
   "scripts": {
     "test": "vitest run",
     "test:watch": "vitest",
