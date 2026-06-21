@@ -1,0 +1,13 @@
+allowBuilds:
+  '@firebase/util': true
+  esbuild: true
+  protobufjs: true
+minimumReleaseAgeExclude:
+  - '@chirag127/astro-shell@0.1.1'
+overrides:
+  happy-dom: "20.10.6"
+  vitest: "4.1.9"
+  "@vitest/mocker": "4.1.9"
+  "@vitest/coverage-v8": "4.1.9"
+  vite: "6.4.3"
+  esbuild: "0.25.12"
