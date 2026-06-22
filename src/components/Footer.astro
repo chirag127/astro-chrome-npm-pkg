@@ -68,6 +68,7 @@ const gitSha = import.meta.env.PUBLIC_GIT_SHA ?? 'dev'
       <p class="ftr-line">Deployed <time datetime={deployTime}>{deployTime}</time> · <code>{gitSha}</code></p>
     </slot>
   </div>
+  <slot name="footer-extra" />
 </footer>
 <style>
   .site-footer { margin-top: 4rem; background: var(--color-paper-2, var(--paper-2)); }

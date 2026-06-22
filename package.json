@@ -1,6 +1,6 @@
 {
   "name": "@chirag127/astro-chrome",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "Shared visual chrome for chirag127 Astro sites — Header / Footer / Wordmark / AccountPanel / FinishSignIn / MultiSearch / StatusBanner / ConsentBanner. Mobile-first responsive at 320/768/1024/1440. Peer-deps on @chirag127/astro-shell.",
   "type": "module",
   "license": "MIT",
@@ -21,7 +21,10 @@
     "./ConsentBanner.astro": "./src/components/ConsentBanner.astro",
     "./Header.astro": "./src/components/Header.astro",
     "./Footer.astro": "./src/components/Footer.astro",
-    "./Wordmark.astro": "./src/components/Wordmark.astro"
+    "./Wordmark.astro": "./src/components/Wordmark.astro",
+    "./Sidebar.astro": "./src/components/Sidebar.astro",
+    "./BottomBar.astro": "./src/components/BottomBar.astro",
+    "./Layout.astro": "./src/components/Layout.astro"
   },
   "publishConfig": { "access": "public" },
   "peerDependencies": {

@@ -1,0 +1,58 @@
+---
+/*
+ * Layout — composes Header, Sidebar, main, Footer, BottomBar.
+ *
+ * Slots (forwarded):
+ *   wordmark-slot, header-nav, header-actions  → Header
+ *   sidebar                                    → Sidebar (omit to skip)
+ *   default                                    → <main>
+ *   footer-extra                               → Footer (bottom)
+ *
+ * Props:
+ *   bottomBarActions?  → renders BottomBar if provided
+ *   title?             → for downstream use (consumers usually own <head>)
+ *   wordmarkText?, wordmarkSubtitle?
+ *   hasSidebar? (default: auto via slot presence)
+ */
+import Header from './Header.astro'
+import Footer from './Footer.astro'
+import Sidebar from './Sidebar.astro'
+import BottomBar from './BottomBar.astro'
+import type { BottomBarAction } from './BottomBar.astro'
+
+interface Props {
+  bottomBarActions?: BottomBarAction[]
+  title?: string
+  wordmarkText?: string
+  wordmarkSubtitle?: string
+  hasSidebar?: boolean
+  footerProps?: Record<string, unknown>
+}
+const { bottomBarActions, wordmarkText, wordmarkSubtitle, hasSidebar, footerProps = {} } = Astro.props
+const showSidebar = hasSidebar ?? Astro.slots.has('sidebar')
+const hasFooterExtra = Astro.slots.has('footer-extra')
+---
+<Header wordmarkText={wordmarkText} wordmarkSubtitle={wordmarkSubtitle}>
+  <slot name="header-nav" slot="default" />
+  <slot name="header-actions" slot="account" />
+  <slot name="wordmark-slot" slot="brand" />
+  <slot name="header-meta" slot="meta" />
+</Header>
+<div class:list={["layout-body", showSidebar && 'has-sidebar']}>
+  {showSidebar && <Sidebar><slot name="sidebar" /></Sidebar>}
+  <main class="layout-main"><slot /></main>
+</div>
+<Footer {...footerProps}>
+  {hasFooterExtra && <div slot="pre"><slot name="footer-extra" /></div>}
+</Footer>
+{bottomBarActions && <BottomBar actions={bottomBarActions} />}
+<style>
+  .layout-body { display: block; }
+  .layout-main { min-height: 50vh; }
+  .layout-body.has-sidebar { display: flex; align-items: flex-start; }
+  .layout-body.has-sidebar .layout-main { flex: 1 1 auto; min-width: 0; }
+  @media (max-width: 767px) {
+    .layout-body.has-sidebar { display: block; }
+    .layout-main { padding-bottom: 64px; }
+  }
+</style>
