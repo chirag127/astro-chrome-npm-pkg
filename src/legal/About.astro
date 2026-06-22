@@ -1,0 +1,76 @@
+---
+/*
+ * About.astro — generic about page with slot for app-specific copy +
+ * family-wide footer note.
+ *
+ * Use the default slot for the app's bespoke "what is this" section.
+ */
+interface Props {
+  appName: string
+  appDomain: string
+  contactEmail: string
+  jurisdiction: string
+  lastUpdated?: string
+}
+const { appName, appDomain, contactEmail, jurisdiction } = Astro.props
+---
+
+<article class="legal-page legal-about">
+  <header class="legal-head">
+    <p class="eyebrow"><a href="/">{appName}</a> / about</p>
+    <h1>About {appName}</h1>
+    <p class="lede">A small, fast, free thing on the open web. Operated from {jurisdiction}.</p>
+  </header>
+
+  <section class="legal-body">
+    <slot>
+      <p>
+        <strong>{appName}</strong> ({appDomain}) is part of the <a href="https://oriz.in">oriz</a>
+        family — a set of small, free, static sites built by Chirag Singhal. Each site
+        does one thing, shares a sign-in, and stays out of your way.
+      </p>
+      <p>
+        We don't track you beyond anonymous edge analytics. We don't sell your data.
+        We don't run a paid tier. If a site is useful to you, that's enough.
+      </p>
+    </slot>
+
+    <h2>Family</h2>
+    <p>
+      {appName} is one of several sites in the oriz family. See the full list at
+      <a href="https://oriz.in/sites/">oriz.in/sites</a>. Each site is its own
+      GitHub repository under <a href="https://github.com/chirag127">chirag127</a>.
+    </p>
+
+    <h2>Principles</h2>
+    <ol class="principles">
+      <li><strong>Static first.</strong> No backend to scale, no 3am page. State (when needed) talks to Firebase from the browser.</li>
+      <li><strong>Privacy by default.</strong> No tracking beyond anonymous edge analytics. End-to-end encrypted where it matters.</li>
+      <li><strong>Free, no paywall.</strong> Display ads cover the domain renewal. No pro tier, no upsell.</li>
+      <li><strong>Owned, not rented.</strong> Code, content, and domain are all owned. If a host disappears, the data is mine.</li>
+      <li><strong>Small surface.</strong> Each site has one job. The shared sign-in works across them all.</li>
+      <li><strong>Long horizon.</strong> A 100-year plan: git is canonical, cloud caches are secondary.</li>
+      <li><strong>Quiet.</strong> No popups. No newsletter you didn't ask for. No notification prompts.</li>
+    </ol>
+
+    <h2>Contact</h2>
+    <p>
+      Email: <a href={`mailto:${contactEmail}`}>{contactEmail}</a>. For site-related
+      issues — typos, broken links, suggestions — see the
+      <a href="/contact/">contact page</a>.
+    </p>
+  </section>
+</article>
+
+<style>
+  .legal-page { max-width: 72ch; margin-inline: auto; padding-block: 2rem; }
+  .legal-head { border-bottom: 1px solid var(--rule, #e5e5e5); padding-bottom: 1.5rem; margin-bottom: 2rem; }
+  .legal-head h1 { font-family: var(--font-display, Georgia, serif); font-size: clamp(2rem, 4vw, 3rem); margin: 0.25rem 0; }
+  .eyebrow { font-size: 0.875rem; color: var(--ink-mute, #666); margin: 0; }
+  .eyebrow a { color: inherit; }
+  .lede { font-size: 1.125rem; color: color-mix(in oklab, var(--ink, #111) 90%, var(--paper, #fff)); }
+  .legal-body h2 { font-family: var(--font-display, Georgia, serif); font-size: 1.5rem; margin-top: 2.5rem; margin-bottom: 0.5rem; }
+  .legal-body p, .legal-body li { line-height: 1.65; }
+  .principles { padding-left: 1.25rem; }
+  .principles li { margin-block: 0.5rem; }
+</style>

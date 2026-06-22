@@ -1,0 +1,108 @@
+---
+/*
+ * SecurityTxt.astro — renders a security.txt body per RFC 9116.
+ *
+ * Two modes:
+ *   1. Default — renders a human-readable HTML page explaining the security
+ *      contact and disclosure policy.
+ *   2. format="text" — renders a raw plain-text body for /.well-known/security.txt.
+ *      Mount this from a `.txt.ts` or `.txt.astro` route and set the response
+ *      content-type to "text/plain" in the consuming app.
+ *
+ * Standard fields: Contact, Expires, Preferred-Languages, Canonical, Policy.
+ */
+interface Props {
+  appName: string
+  appDomain: string
+  contactEmail: string
+  jurisdiction?: string
+  lastUpdated?: string
+  expires?: string  // ISO date; defaults to +1 year from lastUpdated
+  preferredLanguages?: string  // comma-separated, default "en"
+  policyUrl?: string  // optional link to vuln-disclosure policy
+  format?: 'html' | 'text'
+}
+const {
+  appName,
+  appDomain,
+  contactEmail,
+  lastUpdated,
+  expires,
+  preferredLanguages = 'en',
+  policyUrl,
+  format = 'html',
+} = Astro.props
+
+function computeExpires(): string {
+  if (expires) return expires
+  const base = lastUpdated ? new Date(lastUpdated) : new Date()
+  const oneYear = new Date(base)
+  oneYear.setFullYear(oneYear.getFullYear() + 1)
+  return oneYear.toISOString().slice(0, 10) + 'T00:00:00.000Z'
+}
+const expiresValue = computeExpires()
+const canonical = `https://${appDomain}/.well-known/security.txt`
+
+const textBody = [
+  `# Security contact for ${appName} (${appDomain})`,
+  `Contact: mailto:${contactEmail}`,
+  `Expires: ${expiresValue}`,
+  `Preferred-Languages: ${preferredLanguages}`,
+  `Canonical: ${canonical}`,
+  policyUrl ? `Policy: ${policyUrl}` : '',
+].filter(Boolean).join('\n')
+---
+
+{format === 'text' ? (
+  <Fragment set:html={textBody} />
+) : (
+  <article class="legal-page legal-security">
+    <header class="legal-head">
+      <p class="eyebrow"><a href="/">{appName}</a> / security</p>
+      <h1>Security</h1>
+      <p class="lede">
+        Found a vulnerability in <strong>{appName}</strong> ({appDomain})?
+        Email <a href={`mailto:${contactEmail}`}>{contactEmail}</a>.
+      </p>
+    </header>
+
+    <section class="legal-body">
+      <h2>Disclosure policy</h2>
+      <p>
+        We treat all security reports seriously. Please give us a reasonable
+        window (typically 90 days) to fix and deploy before public disclosure.
+        We'll acknowledge your report within 2 business days.
+      </p>
+
+      <h2>Scope</h2>
+      <ul>
+        <li>Anything served from {appDomain} and its subdomains.</li>
+        <li>Cloud Workers / Functions that back the site.</li>
+        <li>NPM packages published under <code>@chirag127/*</code> that this site consumes.</li>
+      </ul>
+      <p>Out of scope: third-party services (Firebase, Cloudflare, GitHub) — report directly to them.</p>
+
+      <h2>security.txt</h2>
+      <p>
+        The machine-readable contact (RFC 9116) is at
+        <a href="/.well-known/security.txt"><code>/.well-known/security.txt</code></a>.
+      </p>
+      <pre><code>{textBody}</code></pre>
+
+      <slot />
+    </section>
+  </article>
+)}
+
+<style>
+  .legal-page { max-width: 72ch; margin-inline: auto; padding-block: 2rem; }
+  .legal-head { border-bottom: 1px solid var(--rule, #e5e5e5); padding-bottom: 1.5rem; margin-bottom: 2rem; }
+  .legal-head h1 { font-family: var(--font-display, Georgia, serif); font-size: clamp(2rem, 4vw, 3rem); margin: 0.25rem 0; }
+  .eyebrow { font-size: 0.875rem; color: var(--ink-mute, #666); margin: 0; }
+  .eyebrow a { color: inherit; }
+  .lede { font-size: 1.125rem; color: color-mix(in oklab, var(--ink, #111) 90%, var(--paper, #fff)); }
+  .legal-body h2 { font-family: var(--font-display, Georgia, serif); font-size: 1.5rem; margin-top: 2.5rem; margin-bottom: 0.5rem; }
+  .legal-body p, .legal-body li { line-height: 1.65; }
+  .legal-body ul { padding-left: 1.25rem; }
+  pre { background: color-mix(in oklab, var(--paper, #fff) 92%, var(--ink, #111)); padding: 1rem; border-radius: 4px; overflow-x: auto; font-size: 0.875rem; }
+</style>

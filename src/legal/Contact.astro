@@ -1,0 +1,62 @@
+---
+/*
+ * Contact.astro — generic contact page that renders <ContactForm /> from
+ * @chirag127/oriz-ui (a React island) plus a plain mailto fallback.
+ *
+ * ContactForm is the canonical React contact-form component for the family.
+ * If oriz-ui is not installed in the consuming app, the mailto fallback
+ * still works.
+ */
+import ContactForm from '@chirag127/oriz-ui/ContactForm'
+
+interface Props {
+  appName: string
+  appDomain: string
+  contactEmail: string
+  jurisdiction?: string
+  lastUpdated?: string
+}
+const { appName, appDomain, contactEmail } = Astro.props
+const web3formsKey = import.meta.env.PUBLIC_WEB3FORMS_KEY ?? ''
+---
+
+<article class="legal-page legal-contact">
+  <header class="legal-head">
+    <p class="eyebrow"><a href="/">{appName}</a> / contact</p>
+    <h1>Contact</h1>
+    <p class="lede">Email is fastest: <a href={`mailto:${contactEmail}`}>{contactEmail}</a>.</p>
+  </header>
+
+  <section class="legal-body">
+    <p>
+      For anything related to <strong>{appName}</strong> ({appDomain}) — typo on a page,
+      broken link, suggestion, or a bug — use the form below. It posts to a static-form
+      relay and forwards to the operator's inbox. No data is stored on this site.
+    </p>
+
+    <ContactForm
+      client:load
+      accessKey={web3formsKey}
+      fromName={`${appDomain} contact form`}
+      to={contactEmail}
+    />
+
+    <p class="meta">
+      For privacy questions, GDPR/DPDP/CCPA requests, or DMCA notices, email
+      <a href={`mailto:${contactEmail}`}>{contactEmail}</a> directly.
+    </p>
+
+    <slot />
+  </section>
+</article>
+
+<style>
+  .legal-page { max-width: 72ch; margin-inline: auto; padding-block: 2rem; }
+  .legal-head { border-bottom: 1px solid var(--rule, #e5e5e5); padding-bottom: 1.5rem; margin-bottom: 2rem; }
+  .legal-head h1 { font-family: var(--font-display, Georgia, serif); font-size: clamp(2rem, 4vw, 3rem); margin: 0.25rem 0; }
+  .eyebrow { font-size: 0.875rem; color: var(--ink-mute, #666); margin: 0; }
+  .eyebrow a { color: inherit; }
+  .lede { font-size: 1.125rem; color: color-mix(in oklab, var(--ink, #111) 90%, var(--paper, #fff)); }
+  .legal-body p { line-height: 1.65; }
+  .meta { font-size: 0.875rem; color: var(--ink-mute, #666); margin-top: 2rem; }
+</style>

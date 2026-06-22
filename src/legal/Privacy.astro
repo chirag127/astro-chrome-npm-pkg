@@ -1,0 +1,112 @@
+---
+/*
+ * Privacy.astro — generic privacy policy template.
+ *
+ * Termly-style boilerplate. Apps wrap with their own <BaseLayout> and pass
+ * `appName`, `appDomain`, `contactEmail`, `jurisdiction`, `lastUpdated`.
+ * App-specific addenda go in the default slot.
+ *
+ * Uses CSS custom properties from @chirag127/astro-shell tokens (--ink,
+ * --paper, --rule, --ink-mute, --font-display).
+ */
+interface Props {
+  appName: string
+  appDomain: string
+  contactEmail: string
+  jurisdiction: string
+  lastUpdated: string
+}
+const { appName, appDomain, contactEmail, jurisdiction, lastUpdated } = Astro.props
+---
+
+<article class="legal-page legal-privacy">
+  <header class="legal-head">
+    <p class="eyebrow"><a href="/">{appName}</a> / privacy</p>
+    <h1>Privacy Policy</h1>
+    <p class="meta">Last updated · {lastUpdated} · {jurisdiction}</p>
+  </header>
+
+  <section class="legal-body">
+    <p class="lede">
+      This policy explains what <strong>{appName}</strong> ({appDomain}) collects,
+      how it's stored, how long it's kept, and how to reach us. Plain language only.
+    </p>
+
+    <h2>What we collect</h2>
+    <ul>
+      <li><strong>Necessary</strong> — session cookies if you sign in, CSRF tokens, and per-incident dismissal flags. Never leaves your device except to complete the requested action.</li>
+      <li><strong>Edge analytics</strong> — Cloudflare Web Analytics (no cookies, no fingerprint, page-load counts only). Runs without consent because no personal data is captured.</li>
+      <li><strong>Optional analytics</strong> — Google Analytics 4, PostHog, Microsoft Clarity. Consent required in EU/UK; opt-out in US/CA; not loaded elsewhere by default.</li>
+      <li><strong>Functional</strong> — theme, language, font-size preferences stored in localStorage.</li>
+    </ul>
+    <p>We do <strong>not</strong> sell, rent, or share your data with any third party beyond the named processors above, each bound by their own published terms.</p>
+
+    <h2>Where it's stored</h2>
+    <ul>
+      <li>Cloudflare (US + global edge) — static assets, analytics aggregates, security.</li>
+      <li>Firebase (US, asia-south1) — auth, Firestore, FCM tokens for opt-in push.</li>
+      <li>Third-party analytics processors (GA4, PostHog, Clarity, Sentry) — only when consent or jurisdiction permits.</li>
+    </ul>
+
+    <h2>How long we keep it</h2>
+    <ul>
+      <li>Authenticated session — until you sign out, max 30 days idle.</li>
+      <li>Cloudflare Web Analytics — 6 months.</li>
+      <li>GA4 — 14 months (minimum).</li>
+      <li>PostHog — 1 year.</li>
+      <li>Clarity — 30 days for replays, 1 year for aggregates.</li>
+      <li>Server-side data you create — until you delete it or your account.</li>
+    </ul>
+
+    <h2>Cookies + consent</h2>
+    <p>
+      We use a consent manager with five categories (necessary, analytics, marketing,
+      functional, social). EU/UK visitors see the banner default-DENIED; US/CA visitors
+      see it default-ACCEPTED with <code>Sec-GPC: 1</code> auto-honoured; visitors
+      elsewhere don't see a banner.
+    </p>
+
+    <h2>Your rights</h2>
+    <p>
+      Under GDPR / UK GDPR / India's DPDP Act / CCPA, you can request a copy of your
+      data, ask us to delete or correct it, or withdraw consent at any time. Email
+      <a href={`mailto:${contactEmail}`}>{contactEmail}</a>. We respond within 30 days.
+    </p>
+
+    <h2>Children</h2>
+    <p>
+      {appName} is not targeted at children under 13 (US COPPA) or 16 (EU). We do not
+      knowingly collect data from minors. If you believe a minor has provided personal
+      data, email us and we will delete it.
+    </p>
+
+    <h2>Changes</h2>
+    <p>
+      We review this policy annually and on material processor changes. Updates are
+      flagged at the top of this page for one week. The current version date is shown
+      above.
+    </p>
+
+    <h2>Contact</h2>
+    <p>
+      Email: <a href={`mailto:${contactEmail}`}>{contactEmail}</a>. Jurisdiction:
+      {jurisdiction}.
+    </p>
+
+    <!-- App-specific addendum slot -->
+    <slot />
+  </section>
+</article>
+
+<style>
+  .legal-page { max-width: 72ch; margin-inline: auto; padding-block: 2rem; }
+  .legal-head { border-bottom: 1px solid var(--rule, #e5e5e5); padding-bottom: 1.5rem; margin-bottom: 2rem; }
+  .legal-head h1 { font-family: var(--font-display, Georgia, serif); font-size: clamp(2rem, 4vw, 3rem); margin: 0.25rem 0; }
+  .eyebrow { font-size: 0.875rem; color: var(--ink-mute, #666); margin: 0; }
+  .eyebrow a { color: inherit; }
+  .meta { font-size: 0.875rem; color: var(--ink-mute, #666); margin-top: 0.5rem; }
+  .legal-body h2 { font-family: var(--font-display, Georgia, serif); font-size: 1.5rem; margin-top: 2.5rem; margin-bottom: 0.5rem; }
+  .legal-body p, .legal-body li { line-height: 1.65; }
+  .legal-body ul { padding-left: 1.25rem; }
+  .lede { font-size: 1.125rem; color: color-mix(in oklab, var(--ink, #111) 90%, var(--paper, #fff)); }
+</style>

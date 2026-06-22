@@ -1,0 +1,122 @@
+---
+/*
+ * Terms.astro — generic terms of service template.
+ *
+ * Termly-style boilerplate. Same prop shape as Privacy.astro.
+ */
+interface Props {
+  appName: string
+  appDomain: string
+  contactEmail: string
+  jurisdiction: string
+  lastUpdated: string
+}
+const { appName, appDomain, contactEmail, jurisdiction, lastUpdated } = Astro.props
+---
+
+<article class="legal-page legal-terms">
+  <header class="legal-head">
+    <p class="eyebrow"><a href="/">{appName}</a> / terms</p>
+    <h1>Terms of Service</h1>
+    <p class="meta">Last updated · {lastUpdated} · {jurisdiction}</p>
+  </header>
+
+  <section class="legal-body">
+    <p class="lede">
+      By using <strong>{appName}</strong> ({appDomain}) you agree to these terms.
+      If you disagree with any part, please stop using the service.
+    </p>
+
+    <h2>Service</h2>
+    <p>
+      {appName} is provided as-is, on a best-effort basis, with no uptime SLA. We may
+      change, add, or remove features at any time. Most updates are silent; material
+      changes are announced on the page or by email if you've signed up.
+    </p>
+
+    <h2>Account</h2>
+    <p>
+      You're responsible for keeping your account credentials safe. Don't share them.
+      We use Firebase Authentication and never see your password directly. If you
+      think your account has been compromised, email <a href={`mailto:${contactEmail}`}>{contactEmail}</a>
+      and we will revoke its sessions.
+    </p>
+
+    <h2>Acceptable use</h2>
+    <ul>
+      <li>Don't use {appName} to break the law in your jurisdiction or ours.</li>
+      <li>Don't attempt to gain unauthorised access, run automated abuse, or attack other users.</li>
+      <li>Don't upload content you don't have the right to share.</li>
+      <li>Don't use the service to harass, defame, or threaten anyone.</li>
+    </ul>
+    <p>We may suspend or terminate accounts that violate these rules. Egregious abuse may be reported to law enforcement.</p>
+
+    <h2>Your content</h2>
+    <p>
+      You retain ownership of anything you upload or create. You grant us a limited
+      licence to store, process, and display that content solely to provide the
+      service. We don't claim copyright on your work and don't train ML models on it.
+    </p>
+
+    <h2>Payment + refunds</h2>
+    <p>
+      Where {appName} offers paid features, prices are shown in INR (or USD where
+      applicable) at checkout. Refunds follow our <a href="/refunds/">refund policy</a>
+      (7-day money-back window).
+    </p>
+
+    <h2>Disclaimer of warranties</h2>
+    <p>
+      {appName} is provided "as is" without warranties of any kind, express or implied,
+      including but not limited to merchantability, fitness for a particular purpose,
+      or non-infringement. We do not guarantee the service will be uninterrupted,
+      error-free, or secure against every threat.
+    </p>
+
+    <h2>Limitation of liability</h2>
+    <p>
+      To the maximum extent permitted by law, {appName} and its operator are not
+      liable for any indirect, incidental, special, consequential, or punitive damages,
+      or any loss of data, revenue, or goodwill, arising from your use of the service.
+      Our total liability is capped at the amount you paid in the 12 months before
+      the claim.
+    </p>
+
+    <h2>Termination</h2>
+    <p>
+      You may stop using {appName} at any time and delete your account from settings.
+      We may suspend accounts that breach these terms. Upon termination, your data is
+      deleted within 30 days except where retention is legally required.
+    </p>
+
+    <h2>Governing law</h2>
+    <p>
+      These terms are governed by the laws of {jurisdiction}. Disputes are subject to
+      the exclusive jurisdiction of its courts.
+    </p>
+
+    <h2>Changes to these terms</h2>
+    <p>
+      We may update these terms. Material changes are flagged at the top of this page
+      for one week. Continued use after that constitutes acceptance.
+    </p>
+
+    <h2>Contact</h2>
+    <p>Email: <a href={`mailto:${contactEmail}`}>{contactEmail}</a>.</p>
+
+    <slot />
+  </section>
+</article>
+
+<style>
+  .legal-page { max-width: 72ch; margin-inline: auto; padding-block: 2rem; }
+  .legal-head { border-bottom: 1px solid var(--rule, #e5e5e5); padding-bottom: 1.5rem; margin-bottom: 2rem; }
+  .legal-head h1 { font-family: var(--font-display, Georgia, serif); font-size: clamp(2rem, 4vw, 3rem); margin: 0.25rem 0; }
+  .eyebrow { font-size: 0.875rem; color: var(--ink-mute, #666); margin: 0; }
+  .eyebrow a { color: inherit; }
+  .meta { font-size: 0.875rem; color: var(--ink-mute, #666); margin-top: 0.5rem; }
+  .legal-body h2 { font-family: var(--font-display, Georgia, serif); font-size: 1.5rem; margin-top: 2.5rem; margin-bottom: 0.5rem; }
+  .legal-body p, .legal-body li { line-height: 1.65; }
+  .legal-body ul { padding-left: 1.25rem; }
+  .lede { font-size: 1.125rem; color: color-mix(in oklab, var(--ink, #111) 90%, var(--paper, #fff)); }
+</style>

@@ -1,0 +1,112 @@
+---
+/*
+ * Disclaimer.astro — financial / health / educational / general disclaimers.
+ *
+ * Generic disclaimer page covering the common bases for the oriz family of
+ * sites (finance calculators, book summaries, NCERT directory, etc.).
+ */
+interface Props {
+  appName: string
+  appDomain: string
+  contactEmail: string
+  jurisdiction: string
+  lastUpdated: string
+}
+const { appName, appDomain, contactEmail, jurisdiction, lastUpdated } = Astro.props
+---
+
+<article class="legal-page legal-disclaimer">
+  <header class="legal-head">
+    <p class="eyebrow"><a href="/">{appName}</a> / disclaimer</p>
+    <h1>Disclaimer</h1>
+    <p class="meta">Last updated · {lastUpdated} · {jurisdiction}</p>
+  </header>
+
+  <section class="legal-body">
+    <p class="lede">
+      Read this before relying on anything you see on <strong>{appName}</strong>
+      ({appDomain}). All content is provided "as is" for informational purposes only.
+    </p>
+
+    <h2>General</h2>
+    <p>
+      The information on {appName} is provided in good faith for general
+      informational and educational purposes only. We make no representation or
+      warranty, express or implied, as to its accuracy, adequacy, validity,
+      reliability, availability, or completeness. Any action you take based on
+      this site is strictly at your own risk.
+    </p>
+
+    <h2>Financial information</h2>
+    <p>
+      Where {appName} shows financial calculators, card details, return
+      projections, or any other money-related data, that material is for
+      <strong>educational purposes only</strong> and is <strong>not financial advice</strong>.
+      Always do your own research and consult a SEBI-registered investment adviser
+      (or your jurisdiction's equivalent) before making a financial decision. Past
+      returns do not guarantee future results.
+    </p>
+
+    <h2>Health information</h2>
+    <p>
+      Any health-related content on {appName} is for general information only and
+      is <strong>not medical advice</strong>. It is not a substitute for diagnosis,
+      treatment, or advice from a qualified medical professional. If you have a
+      medical concern, consult your doctor.
+    </p>
+
+    <h2>Educational content</h2>
+    <p>
+      Where {appName} hosts educational content — book summaries, NCERT
+      directories, course notes — that material is intended as a study aid, not a
+      replacement for the source material or the formal curriculum. We try to be
+      accurate but we make mistakes. Verify against the canonical source before
+      relying on anything for an exam, assignment, or decision.
+    </p>
+
+    <h2>External links</h2>
+    <p>
+      {appName} may contain links to external sites we don't operate. We have no
+      control over their content or practices and accept no liability for them.
+      A link does not imply endorsement.
+    </p>
+
+    <h2>AI-generated content</h2>
+    <p>
+      Some content on {appName} is generated, assisted, or summarised by AI tools.
+      We try to verify before publishing, but AI output can be wrong. If you spot
+      an error, email us and we'll fix it.
+    </p>
+
+    <h2>Affiliate disclosure</h2>
+    <p>
+      Where {appName} earns affiliate commission on a link (e.g. Amazon
+      Associates, payment-card affiliates), that link is marked. Affiliate
+      commission never changes our editorial opinion.
+    </p>
+
+    <h2>Liability</h2>
+    <p>
+      To the maximum extent permitted by law, {appName} and its operator are not
+      liable for any loss or damage arising from your use of, or reliance on,
+      anything on this site.
+    </p>
+
+    <h2>Contact</h2>
+    <p>Email: <a href={`mailto:${contactEmail}`}>{contactEmail}</a>.</p>
+
+    <slot />
+  </section>
+</article>
+
+<style>
+  .legal-page { max-width: 72ch; margin-inline: auto; padding-block: 2rem; }
+  .legal-head { border-bottom: 1px solid var(--rule, #e5e5e5); padding-bottom: 1.5rem; margin-bottom: 2rem; }
+  .legal-head h1 { font-family: var(--font-display, Georgia, serif); font-size: clamp(2rem, 4vw, 3rem); margin: 0.25rem 0; }
+  .eyebrow { font-size: 0.875rem; color: var(--ink-mute, #666); margin: 0; }
+  .eyebrow a { color: inherit; }
+  .meta { font-size: 0.875rem; color: var(--ink-mute, #666); margin-top: 0.5rem; }
+  .legal-body h2 { font-family: var(--font-display, Georgia, serif); font-size: 1.5rem; margin-top: 2.5rem; margin-bottom: 0.5rem; }
+  .legal-body p, .legal-body li { line-height: 1.65; }
+  .lede { font-size: 1.125rem; color: color-mix(in oklab, var(--ink, #111) 90%, var(--paper, #fff)); }
+</style>
