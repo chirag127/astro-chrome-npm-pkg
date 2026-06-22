@@ -40,7 +40,7 @@ const hasFooterExtra = Astro.slots.has('footer-extra')
 </Header>
 <div class:list={["layout-body", showSidebar && 'has-sidebar']}>
   {showSidebar && <Sidebar><slot name="sidebar" /></Sidebar>}
-  <main class="layout-main"><slot /></main>
+  <main id="main" class="layout-main"><slot /></main>
 </div>
 <Footer {...footerProps}>
   {hasFooterExtra && <div slot="pre"><slot name="footer-extra" /></div>}
