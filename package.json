@@ -1,7 +1,7 @@
 {
   "name": "@chirag127/astro-chrome",
-  "version": "0.1.2",
-  "description": "Shared visual chrome for chirag127 Astro sites — Header / Sidebar / BottomBar / Footer / Stamp / SEO / Auth UI / Analytics / Consent + 24 legal pages + Datasheet Dark tokens + self-hosted fonts. Peer-deps on @chirag127/astro-shell.",
+  "version": "0.1.3",
+  "description": "Shared visual chrome for chirag127 Astro sites — Header / Footer / Wordmark / AccountPanel / FinishSignIn / MultiSearch / StatusBanner / ConsentBanner. Mobile-first responsive at 320/768/1024/1440. Peer-deps on @chirag127/astro-shell.",
   "type": "module",
   "license": "MIT",
   "author": "Chirag Singhal <chirag@oriz.in>",
@@ -18,11 +18,15 @@
     "./FinishSignIn": "./src/components/FinishSignIn.tsx",
     "./MultiSearch": "./src/components/MultiSearch.tsx",
     "./StatusBanner": "./src/components/StatusBanner.tsx",
-    "./ConsentBanner.astro": "./src/components/ConsentBanner.astro"
+    "./ConsentBanner.astro": "./src/components/ConsentBanner.astro",
+    "./Header.astro": "./src/components/Header.astro",
+    "./Footer.astro": "./src/components/Footer.astro",
+    "./Wordmark.astro": "./src/components/Wordmark.astro"
   },
   "publishConfig": { "access": "public" },
   "peerDependencies": {
-    "@chirag127/astro-shell": "^0.1.0",
+    "@chirag127/astro-shell": "^0.1.3",
+    "astro": "^5.0.0 || ^6.0.0",
     "firebase": "^11.0.0 || ^12.0.0",
     "react": "^18.0.0 || ^19.0.0"
   },

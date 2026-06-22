@@ -1,0 +1,80 @@
+---
+/*
+ * Header — 60px minimal chrome bar.
+ *
+ * Slots:
+ *   default        → right-side nav/links (desktop) / drawer items (mobile)
+ *   brand          → override the left-side wordmark
+ *   meta           → optional meta-row above (broadsheet pattern)
+ *   account        → right-side account chip
+ *
+ * Props:
+ *   sticky? (default true), height (px, default 60), wordmarkText, wordmarkSubtitle
+ *
+ * Mobile-first: at <768px, default-slot content folds into a hamburger drawer.
+ * Tested at 320 / 768 / 1024 / 1440.
+ */
+import Wordmark from './Wordmark.astro'
+interface Props {
+  sticky?: boolean
+  height?: number
+  wordmarkText?: string
+  wordmarkSubtitle?: string
+  wordmarkSize?: number
+}
+const { sticky = true, height = 60, wordmarkText = 'oriz', wordmarkSubtitle, wordmarkSize = 22 } = Astro.props
+const hasMeta = Astro.slots.has('meta')
+const hasAccount = Astro.slots.has('account')
+---
+<header class:list={["site-header", sticky && 'is-sticky']} style={`--hdr-h:${height}px;`}>
+  {hasMeta && <div class="hdr-meta"><slot name="meta" /></div>}
+  <div class="hdr-inner">
+    <div class="hdr-brand">
+      <slot name="brand">
+        <Wordmark text={wordmarkText} subtitle={wordmarkSubtitle} size={wordmarkSize} href="/" />
+      </slot>
+    </div>
+    <nav class="hdr-nav" aria-label="primary"><slot /></nav>
+    {hasAccount && <div class="hdr-account"><slot name="account" /></div>}
+    <button class="hdr-burger" type="button" aria-label="Menu" aria-controls="hdr-drawer" aria-expanded="false" data-hdr-burger>
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+  <div class="hdr-drawer" id="hdr-drawer" data-hdr-drawer hidden>
+    <slot name="drawer"><slot /></slot>
+  </div>
+</header>
+<script>
+  const burger = document.querySelector<HTMLButtonElement>('[data-hdr-burger]')
+  const drawer = document.querySelector<HTMLElement>('[data-hdr-drawer]')
+  burger?.addEventListener('click', () => {
+    const open = burger.getAttribute('aria-expanded') === 'true'
+    burger.setAttribute('aria-expanded', String(!open))
+    if (drawer) drawer.hidden = open
+  })
+</script>
+<style>
+  .site-header {
+    background: color-mix(in oklab, var(--color-paper, var(--paper)) 92%, transparent);
+    border-bottom: 1px solid var(--color-rule, var(--rule));
+    backdrop-filter: saturate(180%) blur(10px);
+  }
+  .is-sticky { position: sticky; top: 0; z-index: 50; }
+  .hdr-meta { padding: 4px 16px; font-family: var(--font-mono); font-size: 11px; color: var(--color-ink-mute, var(--ink-mute)); border-bottom: 1px solid var(--color-rule, var(--rule)); }
+  .hdr-inner { height: var(--hdr-h, 60px); display: flex; align-items: center; gap: 16px; padding-inline: 16px; }
+  .hdr-brand { flex: 0 0 auto; display: inline-flex; align-items: center; }
+  .hdr-nav { margin-left: auto; display: inline-flex; align-items: center; gap: 16px; }
+  .hdr-account { display: inline-flex; align-items: center; margin-left: 12px; }
+  .hdr-burger { display: none; background: transparent; border: 0; cursor: pointer; padding: 8px; flex-direction: column; gap: 4px; }
+  .hdr-burger span { display: block; width: 22px; height: 2px; background: var(--color-ink, var(--ink)); }
+  .hdr-drawer { display: none; }
+  /* mobile-first: hide nav, show burger; drawer opens on click */
+  @media (max-width: 767px) {
+    .hdr-nav { display: none; }
+    .hdr-burger { display: inline-flex; margin-left: auto; }
+    .hdr-drawer { display: block; padding: 16px; border-top: 1px solid var(--color-rule, var(--rule)); }
+    .hdr-drawer[hidden] { display: none; }
+  }
+  @media (min-width: 1024px) { .hdr-inner { padding-inline: 24px; } }
+  @media (min-width: 1440px) { .hdr-inner { padding-inline: 32px; } }
+</style>

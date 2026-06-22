@@ -1,0 +1,70 @@
+---
+/*
+ * Wordmark — shared family wordmark with configurable strike + subtitle.
+ *
+ * Renders `oriz` (default) or arbitrary `text` with an optional hairline
+ * strike through the last glyph, plus an optional `subtitle` after a `/`.
+ *
+ * Variable-font weight axis: `weight` prop (400 / 500 / 600).
+ *
+ *   <Wordmark />                          → oriz (96px, strike on z)
+ *   <Wordmark subtitle="blog" size={22} />
+ *   <Wordmark text="book" subtitle="lore" strike={false} />
+ */
+interface Props {
+  text?: string
+  subtitle?: string
+  size?: number
+  weight?: 400 | 500 | 600
+  strike?: boolean
+  href?: string | null
+  asHeading?: boolean
+}
+const { text = 'oriz', subtitle, size = 96, weight = 600, strike = true, href = null, asHeading = false } = Astro.props
+const chars = [...text]
+const last = chars.length - 1
+const Tag = asHeading ? 'h1' : 'div'
+---
+{href ? (
+  <a class="wm-link" href={href} aria-label={subtitle ? `${text} / ${subtitle}` : text}>
+    <Tag class="wm" style={`--wm-size:${size}px;--wm-weight:${weight};`}>
+      <span class="wm-mark">
+        {chars.map((c, i) => (
+          <span class:list={["wm-l", i === last && strike && 'wm-l-strike']}>{c}{i === last && strike && <span class="wm-strike" aria-hidden="true" />}</span>
+        ))}
+      </span>
+      {subtitle && (<><span class="wm-sep" aria-hidden="true">/</span><span class="wm-sub">{subtitle}</span></>)}
+    </Tag>
+  </a>
+) : (
+  <Tag class="wm" style={`--wm-size:${size}px;--wm-weight:${weight};`}>
+    <span class="wm-mark">
+      {chars.map((c, i) => (
+        <span class:list={["wm-l", i === last && strike && 'wm-l-strike']}>{c}{i === last && strike && <span class="wm-strike" aria-hidden="true" />}</span>
+      ))}
+    </span>
+    {subtitle && (<><span class="wm-sep" aria-hidden="true">/</span><span class="wm-sub">{subtitle}</span></>)}
+  </Tag>
+)}
+<style>
+  .wm-link { display: inline-block; color: inherit; text-decoration: none; }
+  .wm {
+    display: inline-flex; align-items: baseline; gap: 0.18em; margin: 0;
+    font-family: var(--font-display);
+    font-weight: var(--wm-weight, 600);
+    font-size: var(--wm-size, 96px);
+    line-height: 1; letter-spacing: 0.01em; color: var(--color-ink, var(--ink));
+    font-variation-settings: 'wght' var(--wm-weight, 600);
+  }
+  .wm-mark { display: inline-flex; align-items: baseline; }
+  .wm-l { position: relative; display: inline-block; }
+  .wm-l-strike { padding-inline: 0.15em; }
+  .wm-strike {
+    position: absolute; inset: 50% 0 auto 0; height: 0.04em;
+    background: var(--color-brand-vermilion, var(--vermilion, #c1440e));
+    transform: translateY(-50%); pointer-events: none;
+  }
+  @media (max-width: 480px) { .wm-strike { height: max(1px, 0.04em); } }
+  .wm-sep { margin-inline: 0.18em; color: var(--color-ink-mute, var(--ink-mute)); font-weight: 400; }
+  .wm-sub { color: var(--color-accent, var(--mustard)); font-style: italic; font-weight: 400; }
+</style>

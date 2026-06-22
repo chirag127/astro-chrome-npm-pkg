@@ -1,0 +1,90 @@
+---
+/*
+ * Footer — mega-sitemap. Props-driven; everything is overridable.
+ *
+ *   familySites[]: { name, url, category? }   — sister apps
+ *   books[]:       { name, url }
+ *   packages[]:    { name, url }
+ *   currentApp?:   string                     — soft-highlight current item
+ *   showNewsletter?: boolean
+ *   showSupport?:    boolean
+ *   columns?:       custom { label, items[] }[] (overrides the auto layout)
+ *
+ * Mobile-first: 1 column < 768px, 2 cols < 1024px, 4 cols >= 1024px.
+ * Slots:
+ *   default → extra colophon lines (overrides built-in colophon)
+ *   pre     → content above the sitemap (e.g. status block)
+ */
+export interface FooterLink { name: string; url: string; category?: string }
+interface Props {
+  currentApp?: string
+  familySites?: FooterLink[]
+  books?: FooterLink[]
+  packages?: FooterLink[]
+  showNewsletter?: boolean
+  showSupport?: boolean
+  columns?: { label: string; items: FooterLink[] }[]
+}
+const { currentApp, familySites = [], books = [], packages = [], showNewsletter = true, showSupport = true, columns } = Astro.props
+const auto = columns ?? [
+  { label: 'Apps', items: familySites },
+  { label: 'Books', items: books },
+  { label: 'Packages', items: packages },
+]
+const deployTime = import.meta.env.PUBLIC_DEPLOY_TIME ?? new Date().toISOString().slice(0, 10)
+const gitSha = import.meta.env.PUBLIC_GIT_SHA ?? 'dev'
+---
+<footer class="site-footer">
+  <slot name="pre" />
+  <hr class="ftr-rule" />
+  <div class="ftr-grid">
+    {auto.map((col) => (
+      <div class="ftr-col">
+        <h2 class="ftr-h">{col.label}</h2>
+        <ul>
+          {col.items.map((l) => (
+            <li><a href={l.url} class:list={[currentApp === l.name && 'is-current']}>{l.name}</a></li>
+          ))}
+        </ul>
+      </div>
+    ))}
+    {(showNewsletter || showSupport) && (
+      <div class="ftr-col">
+        <h2 class="ftr-h">Meta</h2>
+        <ul>
+          {showSupport && <li><a href="/support/">Support</a></li>}
+          {showNewsletter && <li><a href="/newsletter/">Newsletter</a></li>}
+          <li><a href="/privacy/">Privacy</a></li>
+          <li><a href="/legal/terms/">Terms</a></li>
+          <li><a href="https://github.com/chirag127/oriz">Source</a></li>
+        </ul>
+      </div>
+    )}
+  </div>
+  <hr class="ftr-rule" />
+  <div class="ftr-colophon">
+    <slot>
+      <p class="ftr-line">Built with Astro + React + Tailwind.</p>
+      <p class="ftr-line">Deployed <time datetime={deployTime}>{deployTime}</time> · <code>{gitSha}</code></p>
+    </slot>
+  </div>
+</footer>
+<style>
+  .site-footer { margin-top: 4rem; background: var(--color-paper-2, var(--paper-2)); }
+  .ftr-rule { border: 0; border-top: 1px solid var(--color-rule, var(--rule)); margin: 0; }
+  .ftr-grid { display: grid; grid-template-columns: 1fr; gap: 32px; padding: 32px 16px; }
+  .ftr-col { padding: 0; }
+  .ftr-h { font-family: var(--font-mono); font-size: 11px; text-transform: uppercase; letter-spacing: 0.16em; color: var(--color-ink-mute, var(--ink-mute)); font-weight: 500; margin: 0 0 14px; }
+  .ftr-col ul { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 8px; }
+  .ftr-col a { color: var(--color-ink, var(--ink)); font-size: 14px; text-decoration: none; }
+  .ftr-col a:hover { color: var(--color-accent, var(--mustard)); }
+  .ftr-col a.is-current { color: var(--color-accent, var(--mustard)); }
+  .ftr-colophon { padding: 16px; }
+  .ftr-line { margin: 0; font-family: var(--font-mono); font-size: 11px; color: var(--color-ink-mute, var(--ink-mute)); line-height: 1.7; }
+  .ftr-line code { color: var(--color-ink, var(--ink)); }
+  /* 2 cols >= 768px */
+  @media (min-width: 768px) { .ftr-grid { grid-template-columns: 1fr 1fr; padding: 40px 24px; } }
+  /* 4 cols >= 1024px */
+  @media (min-width: 1024px) { .ftr-grid { grid-template-columns: repeat(4, 1fr); padding: 48px 24px; } .ftr-colophon { padding: 16px 24px 32px; } }
+  @media (min-width: 1440px) { .ftr-grid { padding: 56px 32px; } }
+</style>
