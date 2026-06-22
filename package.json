@@ -1,7 +1,7 @@
 {
   "name": "@chirag127/astro-chrome",
-  "version": "0.1.6",
-  "description": "Shared visual chrome for chirag127 Astro sites — Header / Footer / Wordmark / AccountPanel / FinishSignIn / MultiSearch / StatusBanner / ConsentBanner. Mobile-first responsive at 320/768/1024/1440. Peer-deps on @chirag127/astro-shell.",
+  "version": "0.1.7",
+  "description": "Shared visual chrome for chirag127 Astro sites — Header / Footer / Wordmark / AccountPanel / FinishSignIn / MultiSearch / StatusBanner / ConsentBanner / LegalFooter. Mobile-first responsive at 320/768/1024/1440. Peer-deps on @chirag127/astro-shell.",
   "type": "module",
   "license": "MIT",
   "author": "Chirag Singhal <chirag@oriz.in>",
@@ -32,7 +32,8 @@
     "./legal/Refunds.astro": "./src/legal/Refunds.astro",
     "./legal/Disclaimer.astro": "./src/legal/Disclaimer.astro",
     "./legal/SitemapIndex.astro": "./src/legal/SitemapIndex.astro",
-    "./legal/SecurityTxt.astro": "./src/legal/SecurityTxt.astro"
+    "./legal/SecurityTxt.astro": "./src/legal/SecurityTxt.astro",
+    "./legal/LegalFooter.astro": "./src/legal/LegalFooter.astro"
   },
   "publishConfig": { "access": "public" },
   "peerDependencies": {
